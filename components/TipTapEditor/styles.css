@@ -1,0 +1,369 @@
+/* Editor Container */
+.tiptap-editor {
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.dark .tiptap-editor {
+  border-color: #374151;
+}
+
+/* Menu Bar */
+.tiptap-editor .menu-bar {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 8px 12px;
+}
+
+.dark .tiptap-editor .menu-bar {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.tiptap-editor .menu-bar .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.tiptap-editor .menu-bar .button-group button {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.dark .tiptap-editor .menu-bar .button-group button {
+  background: #374151;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.tiptap-editor .menu-bar .button-group button:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.dark .tiptap-editor .menu-bar .button-group button:hover:not(:disabled) {
+  background: #4b5563;
+  border-color: #6b7280;
+}
+
+.tiptap-editor .menu-bar .button-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tiptap-editor .menu-bar .button-group button.is-active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.dark .tiptap-editor .menu-bar .button-group button.is-active {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+/* Editor Content - Simplified like official example */
+.tiptap {
+  padding: 16px 20px;
+  min-height: 300px;
+  outline: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  line-height: 1.6;
+  background: white;
+}
+
+.dark .tiptap {
+  background: #111827;
+}
+
+/* Force text colors to work in dark mode */
+.tiptap {
+  color: #374151;
+}
+
+.dark .tiptap {
+  color: #f9fafb !important;
+}
+
+.tiptap :first-child {
+  margin-top: 0;
+}
+
+/* List styles */
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+
+.dark .tiptap ul,
+.dark .tiptap ol {
+  color: #f9fafb !important;
+}
+
+.tiptap ul li p,
+.tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.tiptap ul {
+  list-style-type: disc;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+}
+
+/* Heading styles - Force dark mode with !important */
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  line-height: 1.1;
+  margin-top: 2.5rem;
+  text-wrap: pretty;
+  font-weight: 600;
+  color: #1f2937 !important;
+}
+
+.dark .tiptap h1,
+.dark .tiptap h2,
+.dark .tiptap h3,
+.dark .tiptap h4,
+.dark .tiptap h5,
+.dark .tiptap h6 {
+  color: #f9fafb !important;
+}
+
+.tiptap h1,
+.tiptap h2 {
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tiptap h1 {
+  font-size: 1.8rem;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+}
+
+.tiptap h3 {
+  font-size: 1.25rem;
+}
+
+.tiptap h4 {
+  font-size: 1.1rem;
+}
+
+.tiptap h5,
+.tiptap h6 {
+  font-size: 1rem;
+}
+
+/* Paragraph and text styles - Force dark mode with !important */
+.tiptap p {
+  margin: 1.5rem 0;
+  color: #374151 !important;
+}
+
+.dark .tiptap p {
+  color: #e5e7eb !important;
+}
+
+.tiptap strong {
+  color: #1f2937 !important;
+}
+
+.dark .tiptap strong {
+  color: #f9fafb !important;
+}
+
+.tiptap em {
+  color: #374151 !important;
+}
+
+.dark .tiptap em {
+  color: #e5e7eb !important;
+}
+
+/* Code styles */
+.tiptap code {
+  background-color: #f1f5f9;
+  border-radius: 0.4rem;
+  color: #0f172a;
+  font-size: 0.85rem;
+  padding: 0.25em 0.3em;
+}
+
+.dark .tiptap code {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+.tiptap pre {
+  background: #1e293b;
+  border-radius: 0.5rem;
+  color: #e2e8f0;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.dark .tiptap pre {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.tiptap pre code {
+  background: none;
+  color: inherit;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+.tiptap blockquote {
+  border-left: 4px solid #3b82f6;
+  background: #f8fafc;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  font-style: italic;
+  color: #475569 !important;
+}
+
+.dark .tiptap blockquote {
+  border-left-color: #2563eb;
+  background: #1e293b;
+  color: #cbd5e1 !important;
+}
+
+
+.dark p span {
+  background-color: none !important;
+}
+
+.tiptap hr {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin: 2rem 0;
+}
+
+.dark .tiptap hr {
+  border-top-color: #374151;
+}
+
+/* Placeholder styling */
+.tiptap .is-editor-empty:first-child::before {
+  color: #94a3b8;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.dark .tiptap .is-editor-empty:first-child::before {
+  color: #6b7280;
+}
+
+/* Image Styles */
+.editor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.tiptap .ProseMirror-focused .editor-image {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.dark .tiptap .ProseMirror-focused .editor-image {
+  outline-color: #2563eb;
+}
+
+/* Table styles */
+.tiptap table {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.tiptap table td,
+.tiptap table th {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+  color: #374151 !important;
+}
+
+.dark .tiptap table td,
+.dark .tiptap table th {
+  border-color: #374151;
+  color: #e5e7eb !important;
+}
+
+.tiptap table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #1f2937 !important;
+}
+
+.dark .tiptap table th {
+  background: #1f2937;
+  color: #f9fafb !important;
+}
+
+.tiptap table tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.dark .tiptap table tr:nth-child(even) {
+  background: #1f2937;
+}
+
+.dark .tiptap table tr:nth-child(odd) {
+  background: #111827;
+}
+
+/* Link styles */
+.tiptap a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.dark .tiptap a {
+  color: #60a5fa;
+}
+
+.tiptap a:hover {
+  color: #2563eb;
+}
+
+.dark .tiptap a:hover {
+  color: #93c5fd;
+}
+
+/* Nuclear option: Force all text elements in dark mode */
+.dark .tiptap * {
+  color: inherit !important;
+}
+
+/* Specifically target any inline styles that might be overriding */
+.dark .tiptap [style*="color"] {
+  color: #f9fafb !important;
+}
