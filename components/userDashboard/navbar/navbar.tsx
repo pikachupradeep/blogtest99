@@ -35,7 +35,7 @@ const UserNavbar = async ({ userId }: NavbarProps) => {
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
             <FaUserCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {hasSession ? 'Welcome back!' : 'Hello, Guest'}
+              {hasSession ? `User: ${userId}` : 'Hello, Guest'}
             </span>
           </div>
         </div>
@@ -44,10 +44,16 @@ const UserNavbar = async ({ userId }: NavbarProps) => {
       {/* Navigation Bar */}
       <div className="min-h-[60px] w-full flex justify-between items-center px-6 bg-gradient-to-r from-blue-50/50 dark:from-blue-900/20 to-purple-50/50 dark:to-purple-900/20 border-t border-gray-100 dark:border-gray-700">
         <div className="flex items-center gap-1">
-        
+          <Link 
+            href="/userDashboard"
+            className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-all duration-200 border border-transparent hover:border-blue-200 dark:hover:border-blue-800 hover:shadow-sm"
+          >
+            <FaFileAlt className="w-4 h-4" />
+            <span className="text-sm font-medium">Dashboard</span>
+          </Link>
           
           <Link 
-            href={`/userDashboard/save`}
+            href="/userDashboard/save"
             className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-white dark:hover:bg-gray-800 rounded-lg transition-all duration-200 border border-transparent hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-sm"
           >
             <FaBookmark className="w-4 h-4" />

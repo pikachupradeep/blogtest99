@@ -1,8 +1,8 @@
-import React from 'react'
+//app/authDashboard
 
 const page = () => {
   return (
-    <div>page</div>
+    <div><h1>AuthDashboard</h1></div>
   )
 }
 

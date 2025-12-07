@@ -1,20 +1,22 @@
-// app/user/[userId]/layout.tsx
-import Navbar from '@/components/authorDashboard/navbar/navbar'
+// app/authDashboard/layout.tsx
 
-export default async function UserLayout({
+import Navbar from "@/components/authorDashboard/navbar/navbar";
+
+
+export default async function AuthLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: Promise<{ userId: string }>
+  children: React.ReactNode;
+  params: Promise<{}>; // 🔥 required for validation
 }) {
-  // Await the params
-  const { userId } = await params
-  
+
+  const resolvedParams = await params; // still must await even if empty {}
+
   return (
     <>
-      <Navbar userId={userId} />
+      <Navbar userId={""} /> 
       {children}
     </>
-  )
+  );
 }
