@@ -92,7 +92,7 @@ export default async function CategoryPage({ params }: PageProps) {
     );
 
     return (
-      <div className="min-h-screen pt-16 bg-gradient-to-br from-slate-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800 font-mono">
+      <div className="min-h-screen pt-16 bg-linear-to-br from-slate-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800 font-mono">
         {/* Dynamic Hero Section with Category Image */}
         <div className="relative text-white overflow-hidden">
           {/* Background Image with Overlay */}
@@ -107,13 +107,13 @@ export default async function CategoryPage({ params }: PageProps) {
                   style={{margin:'0'}}
                 />
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-gray-600/30 backdrop-blur-[1px]"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-black/50 to-gray-600/30 backdrop-blur-[1px]"></div>
                 {/* Dark Overlay for better text readability */}
                 <div className="absolute inset-0 bg-black/10  dark:bg-black/60"></div>
               </>
             ) : (
               /* Fallback Gradient Background */
-              <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600"></div>
+              <div className="w-full h-full bg-linear-to-r from-blue-500 to-purple-600"></div>
             )}
           </div>
           
@@ -132,14 +132,14 @@ export default async function CategoryPage({ params }: PageProps) {
               <FiArrowRight className="w-3 h-3" />
               <span className="flex items-center text-white font-medium">
                 <FiFolder className="w-4 h-4 mr-2" />
-                {displayCategoryName}
+                <h1 className='capitalize'>{displayCategoryName}</h1>
               </span>
             </nav>
 
             {/* Hero Content */}
             <div className="text-center max-w-4xl mx-auto">
               {/* Main Title */}
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
+              <h1 className="text-4xl capitalize md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
                 {displayCategoryName}
               </h1>
 

@@ -107,7 +107,7 @@ const NavbarTop = () => {
                 href={`/category/${slug}`}
                 className="group"
               >
-                <span className="text-sm font-medium font-mono text-blue-900 dark:text-green-400 hover:text-blue-200 transition-colors duration-200">
+                <span className="text-sm capitalize font-medium font-mono text-blue-900 dark:text-green-400 hover:text-blue-200 transition-colors duration-200">
                   {item.name}
                 </span>
               </Link>
