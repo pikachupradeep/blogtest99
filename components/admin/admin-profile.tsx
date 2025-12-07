@@ -158,7 +158,7 @@ const AdminLoginClient = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 to-blue-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Header */}
         <motion.div
@@ -167,7 +167,7 @@ const AdminLoginClient = () => {
           className="text-center mb-8"
         >
           <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20">
-            <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-16 h-16 bg-linear-to-br from-red-500 to-purple-600 rounded-xl flex items-center justify-center">
               <Image src="/logo.png" alt="Admin Logo" width={48} height={48} className="rounded-lg" />
             </div>
           </div>
@@ -239,7 +239,7 @@ const AdminLoginClient = () => {
                     <button
                       type="submit"
                       disabled={isLoading || !email.includes('@')}
-                      className="w-full py-3 px-4 bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-red-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
+                      className="w-full py-3 px-4 bg-linear-to-r from-red-600 to-purple-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-red-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
                     >
                       {isLoading ? (
                         <div className="flex items-center justify-center space-x-2">
@@ -302,7 +302,7 @@ const AdminLoginClient = () => {
                       <button
                         onClick={() => handleOtpSubmit()}
                         disabled={isLoading || otp.some(digit => digit === '')}
-                        className="w-full py-3 px-4 bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-red-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
+                        className="w-full py-3 px-4 bg-linear-to-r from-red-600 to-purple-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:from-red-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
                       >
                         {isLoading ? (
                           <div className="flex items-center justify-center space-x-2">

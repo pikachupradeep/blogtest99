@@ -21,9 +21,9 @@ export default async function UserLayout({
   const userId = sessionCookie?.value ? "current-user-id" : "guest-user"
   
   return (
-    <>
+    <div className="pt-26">
       <UserNavbar userId={userId} />
       {children}
-    </>
+    </div>
   )
 }

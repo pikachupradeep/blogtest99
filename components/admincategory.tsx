@@ -229,7 +229,7 @@ export function CategoriesTable({ onAddCategory, onEditCategory }: CategoriesTab
 
                 {/* Category Name */}
                 <div className="mb-3">
-                  <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-1 line-clamp-1 font-mono">
+                  <h3 className="font-semibold capitalize text-gray-900 dark:text-white text-lg mb-1 line-clamp-1 font-mono">
                     {category.name}
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded inline-block font-mono">
