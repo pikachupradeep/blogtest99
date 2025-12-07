@@ -1,6 +1,4 @@
-//actions/comment-actions.ts
-
-
+// actions/comment-actions.ts
 'use server';
 
 import { ID, Query } from 'node-appwrite';
@@ -40,12 +38,13 @@ export interface GetCommentsResponse {
   error?: string;
 }
 
-// Since collection has required attributes, we need to include them
+// Only include attributes defined in your schema
+// Appwrite automatically adds $createdAt and $updatedAt
 const COMMENT_ATTRIBUTES = {
   postId: 'postId',
   userId: 'userId', 
-  content: 'content',
-  createdAt: 'createdAt' // Required by your collection
+  content: 'content'
+  // DO NOT include createdAt or updatedAt - Appwrite adds these automatically
 };
 
 export async function createComment(postId: string, content: string): Promise<CreateCommentResponse> {
@@ -73,29 +72,36 @@ export async function createComment(postId: string, content: string): Promise<Cr
       };
     }
 
-    // Create comment with ALL required attributes
+    // Create comment with ONLY schema-defined attributes
     const commentData = {
       [COMMENT_ATTRIBUTES.postId]: postId,
       [COMMENT_ATTRIBUTES.userId]: userId,
       [COMMENT_ATTRIBUTES.content]: content.trim(),
-      [COMMENT_ATTRIBUTES.createdAt]: new Date().toISOString() // Add required createdAt
+      // Appwrite will automatically add $createdAt and $updatedAt
     };
 
-    console.log('Creating comment with required attributes:', commentData);
+    console.log('Creating comment with attributes:', commentData);
 
     const comment = await databases.createDocument(
       process.env.NEXT_PRIVATE_DATABASE_ID!,
-      process.env.NEXT_PRIVATE_COMMENT_COLLECTION!, // 691c0aa50018bb2b9da0
+      process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
       ID.unique(),
       commentData
     );
 
-    console.log('✅ Comment created successfully!');
+    console.log('✅ Comment created successfully! ID:', comment.$id);
 
     return {
       success: true,
       message: 'Comment added successfully',
-      comment: comment as unknown as Comment
+      comment: {
+        $id: comment.$id,
+        postId: comment.postId,
+        userId: comment.userId,
+        content: comment.content,
+        $createdAt: comment.$createdAt,
+        $updatedAt: comment.$updatedAt
+      }
     };
 
   } catch (error: any) {
@@ -107,6 +113,14 @@ export async function createComment(postId: string, content: string): Promise<Cr
       return {
         success: false,
         message: `Configuration error: Missing required attribute "${missingAttr}"`,
+        error: error.message
+      };
+    }
+    
+    if (error.type === 'document_invalid_structure') {
+      return {
+        success: false,
+        message: 'Database schema mismatch. Unknown attribute provided.',
         error: error.message
       };
     }
@@ -129,23 +143,32 @@ export async function getCommentsByPostId(postId: string): Promise<GetCommentsRe
       };
     }
 
-    // Try to query with the standard attribute name
+    // Query with the correct attribute name
     try {
       const response = await databases.listDocuments(
         process.env.NEXT_PRIVATE_DATABASE_ID!,
         process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
         [
-          Query.equal(COMMENT_ATTRIBUTES.postId, postId),
+          Query.equal('postId', postId),
           Query.orderAsc('$createdAt')
         ]
       );
 
+      const comments = response.documents.map(doc => ({
+        $id: doc.$id,
+        postId: doc.postId,
+        userId: doc.userId,
+        content: doc.content,
+        $createdAt: doc.$createdAt,
+        $updatedAt: doc.$updatedAt
+      }));
+
       return {
         success: true,
-        comments: response.documents as unknown as Comment[]
+        comments
       };
     } catch (queryError: any) {
-      // If query fails (schema not created yet or wrong attribute), return empty array
+      // If query fails, return empty array
       console.log('No comments found or query issue:', queryError.message);
       return {
         success: true,
@@ -182,7 +205,7 @@ export async function deleteComment(commentId: string): Promise<{ success: boole
     );
 
     // Check if user owns this comment
-    if (comment[COMMENT_ATTRIBUTES.userId] !== userId) {
+    if (comment.userId !== userId) {
       return { 
         success: false, 
         message: 'You can only delete your own comments' 
@@ -215,12 +238,11 @@ export async function getCommentCount(postId: string): Promise<{ success: boolea
       return { success: false, count: 0, error: 'Post ID is required' };
     }
 
-    // Try to get count with standard attribute
     try {
       const response = await databases.listDocuments(
         process.env.NEXT_PRIVATE_DATABASE_ID!,
         process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
-        [Query.equal(COMMENT_ATTRIBUTES.postId, postId)]
+        [Query.equal('postId', postId)]
       );
 
       return {
@@ -249,62 +271,43 @@ export async function getCommentCount(postId: string): Promise<{ success: boolea
 // Debug function to check collection requirements
 export async function debugCollectionRequirements(): Promise<{ success: boolean; requirements?: any; error?: string }> {
   try {
-    // Try to create a test document to see what's required
-    const testData = {
-      postId: 'test-post-id',
-      userId: 'test-user-id', 
-      content: 'test content',
-      createdAt: new Date().toISOString()
-    };
-
-    const testComment = await databases.createDocument(
+    // First, try to get the collection information
+    const collection = await databases.getCollection(
       process.env.NEXT_PRIVATE_DATABASE_ID!,
-      process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
-      ID.unique(),
-      testData
+      process.env.NEXT_PRIVATE_COMMENT_COLLECTION!
     );
-
-    // Delete the test document
-    await databases.deleteDocument(
-      process.env.NEXT_PRIVATE_DATABASE_ID!,
-      process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
-      testComment.$id
-    );
-
+    
     return {
       success: true,
       requirements: {
-        requiredAttributes: ['postId', 'userId', 'content', 'createdAt'],
-        testPassed: true
+        collectionName: collection.name,
+        collectionId: collection.$id,
+        requiredAttributes: collection.attributes
+          .filter((attr: any) => attr.required)
+          .map((attr: any) => ({ key: attr.key, type: attr.type, required: attr.required })),
+        allAttributes: collection.attributes.map((attr: any) => ({ 
+          key: attr.key, 
+          type: attr.type, 
+          required: attr.required,
+          size: attr.size,
+          default: attr.default 
+        }))
       }
     };
 
   } catch (error: any) {
-    console.error('Debug requirements error:', error);
-    
-    // Parse the error to find missing requirements
-    const missingMatch = error.message?.match(/"([^"]+)"/);
-    const missingAttribute = missingMatch ? missingMatch[1] : 'unknown';
-    
+    console.error('Debug collection error:', error);
     return {
       success: false,
       requirements: {
-        missingAttribute,
         error: error.message
       },
-      error: `Missing required attribute: ${missingAttribute}`
+      error: `Debug error: ${error.message}`
     };
   }
 }
 
-
-
-
-
-
-/// get commenter name and profile image  
-
-// Add this function to your comment-actions.ts
+// Get commenter name and profile image
 export interface CommentWithAuthor extends Comment {
   author?: {
     name: string;
@@ -377,9 +380,6 @@ export async function getCommentsWithAuthors(postId: string): Promise<{ success:
 // Helper function to get profile by user ID
 async function getProfileByUserId(userId: string): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
-    const { databases } = await import('@/lib/appwrite-server');
-    const { Query } = await import('node-appwrite');
-
     const response = await databases.listDocuments(
       process.env.NEXT_PRIVATE_DATABASE_ID!,
       process.env.NEXT_PRIVATE_PROFILE_COLLECTION_ID!,
@@ -402,70 +402,6 @@ async function getProfileByUserId(userId: string): Promise<{ success: boolean; d
     };
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Add these to your existing actions/comment-actions.ts
 
 // Admin Comment Management Functions
 export interface AdminComment {
@@ -507,11 +443,18 @@ export async function getAllCommentsWithUsers(): Promise<{
       process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
       [
         Query.orderDesc('$createdAt'),
-        Query.limit(1000) // Adjust limit as needed
+        Query.limit(1000)
       ]
     );
 
-    const comments = commentsResponse.documents as unknown as AdminComment[];
+    const comments = commentsResponse.documents.map(doc => ({
+      $id: doc.$id,
+      content: doc.content,
+      $createdAt: doc.$createdAt,
+      $updatedAt: doc.$updatedAt,
+      postId: doc.postId,
+      userId: doc.userId
+    }));
 
     // Get user details for each comment
     const commentsWithUsers = await Promise.all(
@@ -651,15 +594,22 @@ export async function updateComment(commentId: string, content: string): Promise
       process.env.NEXT_PRIVATE_COMMENT_COLLECTION!,
       commentId,
       {
-        [COMMENT_ATTRIBUTES.content]: content.trim(),
-        updatedAt: new Date().toISOString()
+        content: content.trim()
+        // Appwrite automatically updates $updatedAt
       }
     );
 
     return {
       success: true,
       message: 'Comment updated successfully',
-      comment: updatedComment as unknown as Comment
+      comment: {
+        $id: updatedComment.$id,
+        postId: updatedComment.postId,
+        userId: updatedComment.userId,
+        content: updatedComment.content,
+        $createdAt: updatedComment.$createdAt,
+        $updatedAt: updatedComment.$updatedAt
+      }
     };
   } catch (error: any) {
     console.error('Error updating comment:', error);
