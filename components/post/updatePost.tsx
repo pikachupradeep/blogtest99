@@ -46,19 +46,26 @@ const countWordsPlain = (text: string): number => {
   return words.length;
 };
 
-// Define Zod schema for validation - UPDATED: Removed slug length restriction
+// Helper function to normalize text (convert smart quotes to straight quotes)
+const normalizeText = (text: string): string => {
+  return text
+    .replace(/[\u2018\u2019]/g, "'")    // Convert smart single quotes to straight quotes
+    .replace(/[\u201C\u201D]/g, '"');   // Convert smart double quotes to straight quotes
+};
+
+// Define Zod schema for validation - UPDATED with same validations as CreatePost
 const updatePostSchema = z.object({
   title: z
     .string()
-    .min(60, 'Title must be at least 60 characters for SEO')
+    .min(50, 'Title must be at least 50 characters for SEO')
     .max(200, 'Title must be less than 200 characters')
-    .regex(/^[a-zA-Z0-9\s\-_.,!?'":;()@#$%^&*+=<>[\]{}|\\\/`~]+$/,
-      'Title contains invalid characters'
+    .regex(/^[a-zA-Z0-9\s\-_,\.!\?:'"@#$%^&*()+=<>\[\]{}|\\\/`~—–•·©®™€£¥•\u2018\u2019\u201C\u201D]+$/u,
+      'Title contains invalid characters. Only letters, numbers, spaces, and common punctuation are allowed.'
     ),
 
   slug: z
     .string()
-    .min(1, 'Slug is required') // REMOVED length restriction
+    .min(1, 'Slug is required')
     .regex(/^[a-z0-9\-]+$/,
       'Slug can only contain lowercase letters, numbers, and hyphens'
     ),
@@ -143,7 +150,8 @@ const EditPost = ({ postId }: EditPostProps) => {
   const [isUploadingThumbnail, setIsUploadingThumbnail] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const TITLE_MIN_CHARS = 60
+  // Updated constants to match CreatePost
+  const TITLE_MIN_CHARS = 50 // Changed from 60 to match CreatePost
   const TITLE_MAX_CHARS = 200
   const DESCRIPTION_MIN_WORDS = 10
   const DESCRIPTION_MAX_WORDS = 100
@@ -176,7 +184,8 @@ const EditPost = ({ postId }: EditPostProps) => {
         const postResult = await getPostByIdAction(postId)
         if (postResult.success && postResult.data) {
           const post = postResult.data
-          setTitle(post.title)
+          // Normalize title to convert smart quotes to straight quotes
+          setTitle(normalizeText(post.title))
           setDescription(post.description)
           setContent(post.content)
           setSlug(post.slug)
@@ -213,7 +222,7 @@ const EditPost = ({ postId }: EditPostProps) => {
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value
+    const newTitle = normalizeText(e.target.value)
     setTitle(newTitle)
     
     if (errors.title) {
@@ -264,6 +273,16 @@ const EditPost = ({ postId }: EditPostProps) => {
         }
         if (wordCount < DESCRIPTION_MIN_WORDS) {
           return `Description must have at least ${DESCRIPTION_MIN_WORDS} words`;
+        }
+      }
+      
+      // For title, check character length (additional validation)
+      if (fieldName === 'title') {
+        if (value.length < TITLE_MIN_CHARS) {
+          return `Title must be at least ${TITLE_MIN_CHARS} characters for SEO`;
+        }
+        if (value.length > TITLE_MAX_CHARS) {
+          return `Title must be less than ${TITLE_MAX_CHARS} characters`;
         }
       }
       
@@ -471,7 +490,7 @@ const EditPost = ({ postId }: EditPostProps) => {
                     ? 'border-red-300 dark:border-red-500 bg-red-50 dark:bg-red-900/20' 
                     : 'border-gray-200 dark:border-gray-600 group-hover:border-blue-300 dark:group-hover:border-blue-600'
                 }`}
-                placeholder="Enter a captivating title for your post (minimum 60 characters)..."
+                placeholder="Enter a captivating title for your post (minimum 50 characters)..."
               />
               <div className="flex justify-between items-center mt-2">
                 <div className="flex items-center">
@@ -503,7 +522,7 @@ const EditPost = ({ postId }: EditPostProps) => {
                 <FiLink className="w-4 h-4 mr-2 text-green-500 dark:text-green-400" />
                 URL Slug *
                 <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
-                  (auto-generated, read-only)
+                  (read-only for editing)
                 </span>
               </label>
               

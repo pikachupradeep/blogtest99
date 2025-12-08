@@ -76,13 +76,14 @@ const generateSlugWithSuffix = (title: string): string => {
 };
 
 // Define Zod schema for validation with word counts
+// Define Zod schema for validation with word counts
 const createPostSchema = z.object({
   title: z
     .string()
-    .min(60, 'Title must be at least 60 characters for SEO')
+    .min(50, 'Title must be at least 50 characters for SEO')
     .max(200, 'Title must be less than 200 characters')
-    .regex(/^[a-zA-Z0-9\s\-_.,!?'":;()@#$%^&*+=<>[\]{}|\\\/`~]+$/,
-      'Title contains invalid characters'
+    .regex(/^[a-zA-Z0-9\s\-_,\.!\?:'"@#$%^&*()+=<>\[\]{}|\\\/`~—–•·©®™€£¥•\u2018\u2019\u201C\u201D]+$/u,
+      'Title contains invalid characters. Only letters, numbers, spaces, and common punctuation are allowed.'
     ),
 
   slug: z
@@ -123,7 +124,6 @@ const createPostSchema = z.object({
       return validTypes.includes(file.type);
     }, 'Only JPEG, PNG, WebP, and GIF images are allowed')
 });
-
 // Type inference from Zod schema
 type CreatePostFormData = z.infer<typeof createPostSchema>;
 
@@ -168,7 +168,7 @@ const CreatePost = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Word limit constants
-  const TITLE_MIN_CHARS = 60
+  const TITLE_MIN_CHARS = 50
   const TITLE_MAX_CHARS = 200
   const DESCRIPTION_MIN_WORDS = 10
   const DESCRIPTION_MAX_WORDS = 100
@@ -308,6 +308,16 @@ const CreatePost = () => {
         }
         if (wordCount < DESCRIPTION_MIN_WORDS) {
           return `Description must have at least ${DESCRIPTION_MIN_WORDS} words`;
+        }
+      }
+      
+      // For title, check character length
+      if (fieldName === 'title') {
+        if (value.length < TITLE_MIN_CHARS) {
+          return `Title must be at least ${TITLE_MIN_CHARS} characters for SEO`;
+        }
+        if (value.length > TITLE_MAX_CHARS) {
+          return `Title must be less than ${TITLE_MAX_CHARS} characters`;
         }
       }
       
@@ -518,7 +528,7 @@ const CreatePost = () => {
                     ? 'border-red-300 dark:border-red-500 bg-red-50 dark:bg-red-900/20' 
                     : 'border-gray-200 dark:border-gray-600 group-hover:border-blue-300 dark:group-hover:border-blue-600'
                 }`}
-                placeholder="Enter a captivating title for your post (minimum 60 characters)..."
+                placeholder="Enter a captivating title for your post (minimum 50 characters)..."
               />
               <div className="flex justify-between items-center mt-2">
                 <div className="flex items-center">

@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
       '/authDashboard', 
       '/userDashboard',
       '/profile',
-      '/admin'
+      
     ]
     
     const isProtectedRoute = protectedRoutes.some(route => 
