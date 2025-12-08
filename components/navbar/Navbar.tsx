@@ -152,10 +152,10 @@ const Navbar = async () => {
   const remainingCategories = categories.slice(availableCategorySlots);
 
   return (
-    <nav className='flex items-center z-50 fixed top-8 w-full justify-between h-[4rem] shadow-lg mt-3rem bg-gray-100 dark:bg-gray-900 px-4 transition-colors duration-300'>
+    <nav className='flex items-center dark:border-b-2 border-gray-800 z-50 fixed top-8 w-full justify-between h-[4rem] shadow-lg mt-3rem bg-gray-100 dark:bg-gray-900 px-4 transition-colors duration-300'>
       <Link href="/">
-        <Image className='h-[3rem] hidden dark:block w-auto object-cover' src="/logowhite.png" alt="logo" width={400} height={400} />
-        <Image className='h-[3rem] dark:hidden w-auto object-cover' src="/logodark.png" alt="logo" width={400} height={400} />
+        <Image className='h-12 hidden dark:block w-auto object-cover' src="/logowhite.png" alt="logo" width={400} height={400} />
+        <Image className='h-12 dark:hidden w-auto object-cover' src="/logodark.png" alt="logo" width={400} height={400} />
       </Link>
 
       <ul className='hidden sm:flex sm:gap-6 md:gap-10 items-center'>

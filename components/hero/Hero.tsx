@@ -229,7 +229,7 @@ export function HeroSection({ onFilterChange }: PostFilterProps) {
               <FaFeather className="w-10 h-10 text-gray-700 dark:text-gray-300" />
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
               EXPLORE STORIES
               <span className="block text-blue-600 dark:text-blue-400 font-mono mt-4 text-4xl md:text-5xl font-bold">
                 DISCOVER IDEAS
