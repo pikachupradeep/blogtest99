@@ -104,7 +104,8 @@ export const config = {
     '/terms',
     '/help',
     '/faq',
-    '/category'
+    '/category',
+    '/blog'
     
     // Add ALL other routes you have
     // If you have more dynamic routes, add them here:
