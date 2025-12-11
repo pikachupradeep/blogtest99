@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Meaningful Reads, Revived Minds, Welcoming Community",
   description:
-    "FountBeyond.com delivers mindful essays, mental wellness guidance, and restorative ideas designed to refresh the mind and nurture emotional well-being. Join a supportive community devoted to balance, clarity, and inner revival.",
+    "FountBeyond.com delivers mindful essays, mental wellness guidance, and restorative ideas designed to refresh the mind and nurture emotional well-being. Join a supportive community devoted to balance, clarity, and inner revival",
 };
 
 
